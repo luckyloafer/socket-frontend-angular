@@ -13,33 +13,33 @@ interface message{
 export class AppComponent {
   title = 'frontend';
   socket: any;
-  messages: message[] = [];
-  newMessage='';
+  messages: { message: string; sendStatus: boolean; senderId: string }[] = [];
+  newMessage = '';
+  userId: string = '';
 
   ngOnInit() {
-    // Connect to the backend socket.io server
-    console.log('initied')
-    try {
-      console.log("inside");
-      
-      this.socket = io('https://backend-ny0k.onrender.com/', {
-        transports: ['websocket', 'polling'],  // Allow WebSocket and fallback to polling
-        upgrade: true  // Allow Socket.IO to try upgrading from polling to WebSocket
-      });
-    } catch (error) {
-      console.log(error)
-    }
-    // Listen for messages from the server
-    this.socket.on('message', (message: message) => {
+   
+    this.userId = this.generateUserId();
+
+    
+    this.socket = io('https://backend-ny0k.onrender.com/');
+
+    
+    this.socket.on('message', (message: { message: string; sendStatus: boolean; senderId: string }) => {
       this.messages.push(message);
     });
   }
+
   sendMessage() {
     if (this.newMessage.trim()) {
-      // Emit the message to the server
-      const sentMessage = {message:this.newMessage,sendStatus:'sent'} 
-      this.socket.emit('message', sentMessage);
+     
+      const message = { message: this.newMessage, sendStatus: true, senderId: this.userId };
+      this.socket.emit('message', message);
       this.newMessage = '';
     }
+  }
+  
+  generateUserId(): string {
+    return 'user-' + Math.random().toString(36).substr(2, 9);
   }
 }

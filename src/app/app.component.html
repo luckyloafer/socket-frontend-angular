@@ -10,8 +10,8 @@
     <h3>Messages:</h3>
     <ul>
       <li *ngFor="let msg of messages">
-        <!-- Apply conditional color using ngStyle -->
-        <span [ngStyle]="{'color': msg.sendStatus ? 'green' : 'red'}">
+        <!-- Change color based on whether the message was sent by the current user -->
+        <span [ngStyle]="{'color': msg.senderId === userId ? 'green' : 'red'}">
           {{ msg.message }}
         </span>
       </li>
