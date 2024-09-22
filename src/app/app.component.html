@@ -1,14 +1,15 @@
-<div style="text-align:center">
+<div style="text-align: center;">
   <h1>
     {{ title }}
   </h1>
   <div>
-    <input [(ngModel)]="newMessage" placeholder="Type a message..." (keydown.enter)="sendMessage()"/>
+    <input [(ngModel)]="newMessage" placeholder="Type a message..." (keydown.enter)="sendMessage()" #messageInput/>
     <button (click)="sendMessage()">Send</button>
   </div>
+  <h3>{{onlineUsers}}</h3>
   <div>
     <h3>Messages:</h3>
-    <ul>
+    <ul >
       <li *ngFor="let msg of messages">
         <!-- Change color based on whether the message was sent by the current user -->
         <span [ngStyle]="{'color': msg.senderId === userId ? 'green' : 'red'}">

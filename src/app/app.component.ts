@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, HostListener  } from '@angular/core';
 import { io } from 'socket.io-client';
 
 interface message{
@@ -16,17 +16,24 @@ export class AppComponent {
   messages: { message: string; sendStatus: boolean; senderId: string }[] = [];
   newMessage = '';
   userId: string = '';
+  onlineUsers: number = 0;
 
   ngOnInit() {
    
     this.userId = this.generateUserId();
 
     
-    this.socket = io('https://backend-ny0k.onrender.com/');
+    this.socket = io('http://localhost:3000/');
+    this.socket.emit('registerUser', this.userId);
 
     
     this.socket.on('message', (message: { message: string; sendStatus: boolean; senderId: string }) => {
       this.messages.push(message);
+    });
+
+    this.socket.on('onlineUsers', (count: number) => {
+      console.log('Unique online users:', count); // Debugging log
+      this.onlineUsers = count;
     });
   }
 
@@ -41,5 +48,19 @@ export class AppComponent {
   
   generateUserId(): string {
     return 'user-' + Math.random().toString(36).substr(2, 9);
+  }
+
+  @ViewChild('messageInput') messageInput!: ElementRef;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'm') {
+      event.preventDefault(); // Prevent any default behavior like minimizing window
+      this.focusInput();
+    }
+  }
+
+  focusInput(): void {
+    this.messageInput.nativeElement.focus();
   }
 }
