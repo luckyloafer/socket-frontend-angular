@@ -21,9 +21,8 @@ export class AppComponent {
   ngOnInit() {
    
     this.userId = this.generateUserId();
-
     
-    this.socket = io('http://localhost:3000/');
+    this.socket = io('https://backend-ny0k.onrender.com/');
     this.socket.emit('registerUser', this.userId);
 
     
