@@ -31,6 +31,11 @@ export class AppComponent {
     this.initializeSocket();
     this.registerUser();
 
+    this.socket.on('message', (message: { message: string; sendStatus: boolean; senderId: string }) => {
+      console.log('New message received:', message); // Debugging log
+      this.messages.push(message);
+    });
+
     // Listen for the onlineUsers event
     this.socket.on('onlineUsers', (count: number) => {
       console.log('Unique online users:', count);
@@ -53,6 +58,13 @@ export class AppComponent {
 
   initializeSocket() {
     this.socket = io('https://backend-ny0k.onrender.com/');
+    this.socket.on('connect', () => {
+      console.log('Connected to server with socket ID:', this.socket.id);
+    });
+  
+    this.socket.on('disconnect', () => {
+      console.log('Disconnected from server.');
+    });
   }
 
   registerUser() {
