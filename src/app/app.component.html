@@ -3,7 +3,7 @@
     {{ title }}
   </h1>
   <div>
-    <input [(ngModel)]="newMessage" placeholder="Type a message..." />
+    <input [(ngModel)]="newMessage" placeholder="Type a message..." (keydown.enter)="sendMessage()"/>
     <button (click)="sendMessage()">Send</button>
   </div>
   <div>
