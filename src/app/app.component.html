@@ -20,4 +20,15 @@
   </div>
 </div>
 
+<div>
+  <h3>Video Call</h3>
+  <div>
+    <!-- Local video stream -->
+    <video #localVideo autoplay muted playsinline></video>
+    <!-- Remote video stream -->
+    <video #remoteVideo autoplay playsinline></video>
+  </div>
+  <button (click)="startCall()">Start Call</button>
+</div>
+
 <router-outlet></router-outlet>
