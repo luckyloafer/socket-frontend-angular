@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { io } from 'socket.io-client';
 
+interface message{
+  message:string,
+  sendStatus:string
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,8 +13,8 @@ import { io } from 'socket.io-client';
 export class AppComponent {
   title = 'frontend';
   socket: any;
-  messages: string[] = [];
-  newMessage = '';
+  messages: message[] = [];
+  newMessage='';
 
   ngOnInit() {
     // Connect to the backend socket.io server
@@ -25,17 +29,16 @@ export class AppComponent {
     } catch (error) {
       console.log(error)
     }
-    
     // Listen for messages from the server
-    this.socket.on('message', (message: string) => {
+    this.socket.on('message', (message: message) => {
       this.messages.push(message);
     });
   }
   sendMessage() {
     if (this.newMessage.trim()) {
       // Emit the message to the server
-      
-      this.socket.emit('message', this.newMessage);
+      const sentMessage = {message:this.newMessage,sendStatus:'sent'} 
+      this.socket.emit('message', sentMessage);
       this.newMessage = '';
     }
   }

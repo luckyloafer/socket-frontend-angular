@@ -9,10 +9,14 @@
   <div>
     <h3>Messages:</h3>
     <ul>
-      <li *ngFor="let msg of messages">{{ msg }}</li>
+      <li *ngFor="let msg of messages">
+        <!-- Apply conditional color using ngStyle -->
+        <span [ngStyle]="{'color': msg.sendStatus ? 'green' : 'red'}">
+          {{ msg.message }}
+        </span>
+      </li>
     </ul>
   </div>
 </div>
-
 
 <router-outlet></router-outlet>
